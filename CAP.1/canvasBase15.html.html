@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Canvas Basico</title>
+
+	<style type="text/css">
+		
+		#miCanvas{
+			border: dotted 2px yellow;
+			background: green;
+		}
+
+	</style>
+
+	<script type="text/javascript">
+		window.onload = function () {
+			var canvas = document.getElementById("miCanvas");
+			if (canvas && canvas.getContext) {
+				var context = canvas.getContext("2d");
+				if (context) {
+					//
+					context.font = "3em Verdana";
+					context.lineWidth = 1.0;
+					context.fillStyle = "blue";
+					context.strokeStyle = "yellow";
+					//
+					context.shadowColor = "black";
+					context.shadowOffsetX = 5;
+					context.shadowOffsetY = 5;
+					context.shadowBlur = 10;
+					//
+					context.fillText("CANVAS",35,150);
+					context.strokeText("CANVAS",35,150);
+					context.fillRect(200,200,150,50);
+					//
+				}else{
+					alert("Error al crear tu contexto");
+				}
+			}
+		}
+	</script>
+</head>
+<body>
+<h1>Conceptos basicos de CANVAS</h1>
+<canvas id="miCanvas" width="500px" height="300px">
+	Tu navegador no soporta CANVAS
+</canvas>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Canvas Basico</title>
+
+	<style type="text/css">
+		
+		#miCanvas{
+			border: dotted 2px yellow;
+			background: green;
+		}
+
+	</style>
+
+	<script type="text/javascript">
+		window.onload = function () {
+			var canvas = document.getElementById("miCanvas");
+			if (canvas && canvas.getContext) {
+				var ctx = canvas.getContext("2d");
+				if (ctx) {
+
+					//Verificacion de lineas
+					ctx.lineWidth = 10;
+					ctx.strokeStyle = "yellow";
+					ctx.fillStyle = "white";
+					//Path
+					ctx.beginPath();
+					ctx.moveTo(50,100);
+					ctx.lineTo(100,50);
+					ctx.lineTo(150,100);
+					ctx.lineTo(100,150);
+					ctx.stroke();
+					//Path
+					ctx.beginPath();
+					ctx.moveTo(200,100);
+					ctx.lineTo(250,50);
+					ctx.lineTo(300,100);
+					ctx.lineTo(250,150);
+					ctx.closePath();
+					ctx.stroke();
+					//Path
+					ctx.beginPath();
+					ctx.moveTo(350,100);
+					ctx.lineTo(400,50);
+					ctx.lineTo(450,100);
+					ctx.lineTo(400,150);
+					ctx.fill();
+					ctx.closePath();
+					ctx.stroke();
+
+
+
+				}else{
+					alert("Error al crear tu contexto");
+				}
+			}
+		}
+	</script>
+</head>
+<body>
+<h1>Conceptos basicos de CANVAS</h1>
+<canvas id="miCanvas" width="500px" height="300px">
+	Tu navegador no soporta CANVAS
+</canvas>
+</body>
+</html>
