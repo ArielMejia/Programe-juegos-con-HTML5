@@ -1,0 +1,96 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>CANVAS</title>
+<style>
+#canvas1{
+	border:dotted 3px yellow;
+	background:green;
+}
+</style>
+<script>
+	//
+	var canvas;
+	var context;
+	var radio = 10;
+	var bolax = 50;
+	var bolay = 100;
+	var dx = 4;
+	var dy = 4;
+	var ancho, alto;
+	var limiteDerecha, limiteIzquierda, limiteArriba, limiteAbajo;
+	// 
+	window.onload = function(){
+		canvas = document.getElementById("canvas1");
+		if(canvas && canvas.getContext){
+			context = canvas.getContext("2d");
+			if(context){
+				//
+				ancho = canvas.width;
+				alto = canvas.height;
+				//controlamos los limites de derecha e izquierda
+				limiteDerecha = ancho - radio;
+				limiteIzquierda = radio;
+				//controlamos los limites de arriba y abajo
+				limiteArriba = radio;
+				limiteAbajo = alto - radio;
+				//
+				context.lineWidth = radio;
+				context.fillStyle = "red";
+				//
+				mueve();
+				setInterval(mueve,60);
+			} else {
+				alert("Error al crear el contexto");
+			}
+		}	
+	}
+
+	function mueve() {
+		context.clearRect(0,0,canvas.width,canvas.height);
+		verifica();
+		context.beginPath();
+		context.arc(bolax,bolay,radio,0,2*Math.PI,true)
+		context.fill();
+	}
+	//
+	function verifica() {
+		//Variables
+		var nbolax = bolax + dx;
+		var nbolay = bolay + dy;
+		//condiciones en x
+		if (nbolax > limiteDerecha) {
+			dx *= -1;
+			nbolax = limiteDerecha;
+		}
+
+		if (nbolax < limiteIzquierda) {
+			dx *= -1;
+			nbolax = limiteIzquierda;
+		}
+		//condiciones en y
+		if (nbolay > limiteAbajo) {
+			dy *= -1;
+			nbolay = limiteAbajo;
+		}
+
+		if (nbolay < limiteArriba) {
+			dy *= -1;
+			nbolay = limiteArriba;
+		}
+
+		//asignaciones
+		bolax = nbolax;
+		bolay = nbolay;
+	}
+
+</script>
+</head>
+<body>
+<h1>Conceptos básicos de Canvas</h1>
+<canvas id="canvas1" width="500px" height="300px">
+Tu navegador no soporta el CANVAS
+</canvas>
+</body>
+</html>
