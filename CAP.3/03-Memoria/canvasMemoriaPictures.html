@@ -1,0 +1,198 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>CANVAS Memoria Imagenes</title>
+<style>
+body{
+	width:1000px;
+	margin:0 auto;
+}
+h1{
+	text-align:center;
+}
+#miCanvas{
+	border:dotted 2px yellow;
+	background:green;	
+}
+</style>
+<script>
+var ctx;
+var primera = true;
+var cartaUno = -1;
+var cartaDos;
+var colorCarta = "purple";
+var colorTablero = "green";
+var cartas_array = new Array();
+var inicioX = 30;
+var inicioY = 50;
+var margin = 30;
+var cartaAncho = 100;
+var cartaAlto = 140;
+var iguales;
+var contador = 0;
+var pares = [
+	["klimt.png", "klimt.png"],
+	["grito.jpg", "grito.jpg"],
+	["vanGogh.png","vanGogh.png"],
+	["poseidon220x211.jpg", "poseidon220x211.jpg"],
+	["hera220x332.jpg", "hera220x332.jpg"],
+	["atenea.png", "atenea.png"],
+	["afrodita.png","afrodita.png"]
+];
+//
+function ajusta(xx, yy){
+	var posCanvas = canvas.getBoundingClientRect();
+	var x = xx - posCanvas.left;
+	var y = yy - posCanvas.top;
+	return {x:x, y:y}	
+}
+//
+function Card(xx, yy, ancho, alto, img, info){
+	this.xx = xx;
+	this.yy = yy;
+	this.ancho = ancho;
+	this.alto = alto;
+	this.info = info;
+	this.img = img;
+	this.dibuja = dibujaCarta;	
+}
+
+function tablero(){
+	var i;
+	var carta;
+	var img;
+	var cx = inicioX;
+	var cy = inicioY;
+	for(i=0; i<pares.length;i++){
+		//pica = new Image();
+		img = "imagenes/imagenes/"+pares[i][0];
+		carta = new Card(cx, cy, cartaAncho, cartaAlto, img, i);
+		cartas_array.push(carta);
+		carta.dibuja();
+		//
+		img = "imagenes/imagenes/"+pares[i][1];
+		carta = new Card(cx, cy+cartaAlto+margin, cartaAncho, cartaAlto, img,i);
+		cartas_array.push(carta);
+		carta.dibuja();
+		//
+		cx += cartaAncho + margin;
+	}
+}
+
+function barajea(){
+	var i, k, tempoInfo, tempoImg;
+	var lon = cartas_array.length;
+	for(var k=0; k<3*lon; k++){
+		i = Math.floor(Math.random()*lon);
+		j = Math.floor(Math.random()*lon);
+		tempoInfo = cartas_array[i].info;
+		tempoImg = cartas_array[i].img;
+		//
+		cartas_array[i].info = cartas_array[j].info;
+		cartas_array[i].img = cartas_array[j].img;
+		//
+		cartas_array[j].info = tempoInfo;
+		cartas_array[j].img = tempoImg;
+	}
+}
+//
+function dibujaCarta(){
+	ctx.fillStyle = colorCarta;
+	ctx.fillRect(this.xx, this.yy, this.ancho, this.alto);	
+}
+//
+function seleccina(e){
+	var xx;
+	var yy;
+	var imagen = new Image();
+	var pos = ajusta(e.clientX, e.clientY);
+	xx = pos.x;
+	yy = pos.y;		
+	var i;
+	for(i=0; i<cartas_array.length;i++){
+		var carta = cartas_array[i];
+		//alert(carta.xx+", "+carta.yy+", "+xx+", "+yy);
+		if(carta.xx >=0){
+			if((xx>carta.xx)&&
+			(xx<carta.xx+carta.ancho)&&
+			(yy>carta.yy)&&
+			(yy<carta.yy+carta.alto)){
+				if((primera)||(i!=cartaUno)) break;	
+			}
+		}	
+	}
+	if(i<cartas_array.length){
+		if(primera){
+			cartaUno = i;
+			primera = false;
+			imagen.src = carta.img;
+			imagen.onload = function(){
+				ctx.drawImage(imagen, carta.xx, carta.yy, carta.ancho, carta.alto);
+			}
+		} else {
+			cartaDos = i;
+			imagen.src = carta.img;
+			imagen.onload = function(){
+				ctx.drawImage(imagen, carta.xx, carta.yy, carta.ancho, carta.alto);
+			}
+			//
+			if(carta.info == cartas_array[cartaUno].info){
+				iguales = true;
+				contador++;
+			} else {
+				iguales = false;
+			}
+			primera = true;
+			setTimeout(voltea,1000);
+		}
+	}
+}
+function voltea(){
+	//var carta;
+	if(!iguales){
+		cartas_array[cartaUno].dibuja();
+		cartas_array[cartaDos].dibuja();
+	} else {
+		ctx.fillStyle = colorTablero;
+		ctx.fillRect(cartas_array[cartaDos].xx,
+					 cartas_array[cartaDos].yy,
+					 cartas_array[cartaDos].ancho,
+					 cartas_array[cartaDos].alto);
+		ctx.fillRect(cartas_array[cartaUno].xx,
+					 cartas_array[cartaUno].yy,
+					 cartas_array[cartaUno].ancho,
+					 cartas_array[cartaUno].alto);
+		cartas_array[cartaDos].xx = -1;
+		cartas_array[cartaUno].xx = -1;
+	}
+	if(contador>=cartas_array.length/2){
+		ctx.clearRect(0,0,canvas.width,canvas.height);
+		ctx.font = "bold 100px Comic";
+		ctx.fillStyle = colorCarta;
+		ctx.fillText("FIN DEL JUEGO",90,200);
+	}
+}
+window.onload = function(){
+	canvas = document.getElementById("miCanvas");
+	if(canvas && canvas.getContext){
+		ctx = canvas.getContext("2d");
+		if(ctx){
+			canvas.addEventListener("click", seleccina, false);
+			tablero();
+			barajea();
+		} else {
+			alert("Error al crear tu contexto");	
+		}
+	}
+}
+</script>
+</head>
+
+<body>
+<h1>Memoria de imágenes</h1>
+<canvas id="miCanvas" width="960px" height="430px">
+Tu navegador no soporta CANVAS
+</canvas>
+</body>
+</html>
