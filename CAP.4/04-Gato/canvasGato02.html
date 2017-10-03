@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>CANVAS</title>
+<style>
+body{
+	width:960px;
+	margin:0 auto;
+}
+h1{
+	text-align:center;
+}
+#miCanvas{
+	border:dotted 2px yellow;
+	background:green;	
+}
+</style>
+<script>
+/**************
+VARIABLES
+***************/
+var ctx, canvas;
+var fichas_array = new Array();
+var COLUMNAS = 3;
+var RENGLONES = 3;
+var fichas_X = 0;
+var fichas_O = 0;
+var tiradas = 0;
+var gameOver = false;
+var largo = 120;
+var colorGato = "black";
+var colorCanvas = "green";
+/**********************/
+function Ficha(x,y,w,h,i,ren,col){
+	this.x = x;
+	this.y = y;
+	this.w = w;
+	this.h = h;
+	this.i = i;
+	this.ren = ren;
+	this.col = col;
+	this.peso = 0;
+	this.valor = "";
+	this.pinta = pintaFicha;	
+}
+function pintaFicha(valor){
+	this.valor = valor;
+	ctx.font = "bold 100px Arial";
+	ctx.fillStyle = colorGato;
+	ctx.fillText(valor, this.x+30, this.y+100, this.w, this.h);
+}
+/********************
+FUNCIONES
+*********************/
+function gato(){
+	ctx.fillStyle = colorCanvas;	
+	ctx.strokeStyle = colorGato;
+	ctx.lineWidth = 20;
+	ctx.beginPath();
+	ctx.moveTo(410,20);
+	ctx.lineTo(410,420);
+	ctx.stroke();
+	//
+	ctx.beginPath();
+	ctx.moveTo(550,20);
+	ctx.lineTo(550,420);
+	ctx.stroke();
+	//
+	ctx.beginPath();
+	ctx.moveTo(280,150);
+	ctx.lineTo(680,150);
+	ctx.stroke();
+	//
+	ctx.beginPath();
+	ctx.moveTo(280,290);
+	ctx.lineTo(680,290);
+	ctx.stroke();
+	//
+	fichas_array.push(new Ficha(280,20,largo, largo, 0, 0, 0));
+	fichas_array.push(new Ficha(420,20,largo, largo, 1, 0, 1));
+	fichas_array.push(new Ficha(560,20,largo, largo, 2, 0, 2));
+	//
+	fichas_array.push(new Ficha(280,160,largo, largo, 3, 1, 0));
+	fichas_array.push(new Ficha(420,160,largo, largo, 4, 1, 1));
+	fichas_array.push(new Ficha(560,160,largo, largo, 5, 1, 2));
+	//
+	fichas_array.push(new Ficha(280,300,largo, largo, 6, 2, 0));
+	fichas_array.push(new Ficha(420,300,largo, largo, 7, 2, 1));
+	fichas_array.push(new Ficha(560,300,largo, largo, 8, 2, 2));
+}
+/********************
+INICIO
+*********************/
+window.onload = function(){
+	canvas = document.getElementById("miCanvas");
+	if(canvas && canvas.getContext){
+		ctx = canvas.getContext("2d");
+		if(ctx){
+			gato();
+		} else {
+			alert("Error al crear tu contexto");	
+		}
+	}
+}
+</script>
+</head>
+
+<body>
+<h1>Conceptos básicos de CANVAS</h1>
+<canvas id="miCanvas" width="960px" height="500px">
+Tu navegador no soporta CANVAS
+</canvas>
+</body>
+</html>

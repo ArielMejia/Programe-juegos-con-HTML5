@@ -1,0 +1,72 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>CANVAS</title>
+		<style>
+			#canvas1{
+				border:dotted 3px yellow;
+				background:green;
+			}
+		</style>
+		<script>
+			/***************
+			Variables
+			***************/
+			var ctx, canvas;
+			var fichas_array = new Array();
+			var COLUMNAS = 3;
+			var RENGLONES = 3;
+			var fichas_X = 0;
+			var ficha_0 = 0;
+			var tiradas = 0;
+			var gameOver = false;
+			var largo = 120;
+			var colorGato = "black";
+
+			//Objeto de las casillas
+			function Ficha(x,y,w,h,i,ren,col) {
+			 	this.x = x;
+			 	this.y = y;
+			 	this.w = w;
+			 	this.h = h;
+			 	this.i = i;
+			 	this.ren = ren;
+			 	this.col = col;
+			 	this.peso = 0;
+			 	this.valor = "";
+			 	this.pinta = pintaFicha;
+			 } 
+
+			 /****************
+			 Metodos
+			 ****************/
+
+			 //Metodo pintaFicha() del objeto Ficha que le da la apariencia a la ficha
+			 function pintaFicha(valor) {
+			 	this.valor = valor;
+			 	ctx.font = "bold 100px Arial";
+			 	ctx.fillStyle = colorGato;
+			 	ctx.fillText(valor, this.x + 30, this.y + 100, this.w,this.h);
+			 }
+
+			window.onload = function(){
+				var canvas = document.getElementById("canvas1");
+				if(canvas && canvas.getContext){
+					var ctx = canvas.getContext("2d");
+					if(ctx){
+						alert("Bienvenido a CANVAS");
+					} else {
+						alert("Error al crear el contexto");
+					}
+				}	
+			}
+		</script>
+	</head>
+	<body>
+		<h1>Conceptos básicos de Canvas</h1>
+		<canvas id="canvas1" width="500px" height="300px">
+		Tu navegador no soporta el CANVAS
+		</canvas>
+	</body>
+</html>
